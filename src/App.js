@@ -12,7 +12,7 @@ const getRandomColors = () => {
 };
 
 function App() {
-    const [numberOfGuesses, setNumberOfGuesses] = useState(0);
+    const [guesses, setGuesses] = useState(0);
     const [oldGuesses, setOldGuesses] = useState([]);
     const randomColors = useRef(getRandomColors());
 
@@ -27,18 +27,29 @@ function App() {
     const submit = (event) => {
         event.preventDefault();
 
-        if (selected.includes("...")) {
-            console.log("You must choose all four colors first!");
+        // if (selected.includes("...")) {
+        //     alert("You must choose all four colors first!");
+        //     return;
+        // }
+
+        if (JSON.stringify(randomColors.current) === JSON.stringify(selected)) {
+            alert("you wonn");
             return;
         }
+
         setSelected(() => [...Array.from(Array(4)).fill("...")]);
-        setNumberOfGuesses((oldState) => oldState + 1);
+        setGuesses((oldState) => oldState + 1);
         setOldGuesses((oldState) => [...oldState, selected]);
+
+        if (guesses >= 7) {
+            alert("game over, you lost");
+            return;
+        }
     };
 
     return (
         <>
-            <h2>Number of Guesses: {numberOfGuesses}</h2>
+            <h2>Number of Guesses: {guesses}</h2>
             <ul>
                 {randomColors.current.map((e, i) => {
                     return <li key={i}>{e}</li>;
