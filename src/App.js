@@ -14,9 +14,8 @@ const getRandomColors = () => {
 function App() {
     const [guesses, setGuesses] = useState(0);
     const [oldGuesses, setOldGuesses] = useState([]);
+    const [selected, setSelected] = useState(Array.from(Array(4)).fill(colors[0]));
     const randomColors = useRef(getRandomColors());
-
-    const [selected, setSelected] = useState(Array.from(Array(4)).fill("..."));
 
     const chooseColor = (index, color) => {
         const array = selected;
@@ -27,19 +26,46 @@ function App() {
     const submit = (event) => {
         event.preventDefault();
 
-        // if (selected.includes("...")) {
-        //     alert("You must choose all four colors first!");
-        //     return;
-        // }
+        if (selected.includes("...")) {
+            alert("You must choose all four colors first!");
+            return;
+        }
+
+        const secret = [];
+        const myGuess = [];
+        const points = { black: 0, white: 0 };
+
+        selected.forEach((color, i) => {
+            if (color !== randomColors.current[i]) {
+                secret.push(randomColors.current[i]);
+                myGuess.push(color);
+                return;
+            }
+            points.white += 1;
+        });
+
+        myGuess.forEach((color, i) => {
+            if (secret.includes(color)) {
+                myGuess.splice(i);
+
+                const index = secret.findIndex((color_) => color_ === color);
+                secret.splice(index);
+
+                points.black += 1;
+            }
+        });
+
+        setSelected(() => [...Array.from(Array(4)).fill("...")]);
+        setGuesses((oldState) => oldState + 1);
+        setOldGuesses((oldState) => [
+            ...oldState,
+            [...selected, `black: ${points.black}, white: ${points.white}`],
+        ]);
 
         if (JSON.stringify(randomColors.current) === JSON.stringify(selected)) {
             alert("you wonn");
             return;
         }
-
-        setSelected(() => [...Array.from(Array(4)).fill("...")]);
-        setGuesses((oldState) => oldState + 1);
-        setOldGuesses((oldState) => [...oldState, selected]);
 
         if (guesses >= 7) {
             alert("game over, you lost");
