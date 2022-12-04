@@ -2,6 +2,7 @@ import {
     Button,
     Container,
     FormControl,
+    Grid,
     InputLabel,
     MenuItem,
     Select,
@@ -11,8 +12,8 @@ import {
 import { useRef, useState } from "react";
 import "./App.css";
 import CircleTwoToneIcon from "@mui/icons-material/CircleTwoTone";
-import HideSourceIcon from "@mui/icons-material/HideSource";
-
+import ClearIcon from "@mui/icons-material/Clear";
+import { grey } from "@mui/material/colors";
 const colors = ["...", "red", "blue", "orange", "lightGray", "green", "brown", "purple", "black"];
 
 const getRandomColors = () => {
@@ -67,7 +68,7 @@ function App() {
             }
         });
 
-        setSelected(() => [...Array.from(Array(4)).fill("...")]);
+        setSelected(() => [...Array.from(Array(4)).fill(colors[1])]);
         setGuesses((oldState) => oldState + 1);
         setOldGuesses((oldState) => [
             ...oldState,
@@ -87,89 +88,128 @@ function App() {
 
     return (
         <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={4}>
-            <Typography variant="h2">Mind Game</Typography>
+            <Typography variant="h3">Mind Game</Typography>
             <Typography variant="h5">Number of Guesses: {guesses}</Typography>
             {/* <ul>
                 {randomColors.current.map((e, i) => {
                     return <li key={i}>{e}</li>;
                 })}
             </ul> */}
-            <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
+            <Grid
+                container
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={2}
+                sx={{ width: { xs: "220px", sm: "450px" } }}
+            >
                 {Array.from(Array(4)).map((_, i) => {
                     return (
-                        <FormControl key={`select${i}`} size="small">
-                            <InputLabel id={`select${i}`}>{`Color ${i + 1}`}</InputLabel>
-                            <Select
-                                sx={{ width: "85px", minHeight: "58px" }}
-                                labelId={`select${i}`}
-                                id={`select${i}`}
-                                value={selected[i]}
-                                label={`Color ${i + 1}`}
-                                onChange={(e) => chooseColor(i, e.target.value)}
-                            >
-                                {colors.map((color) => (
-                                    <MenuItem value={color} key={color}>
-                                        {color !== colors[0] ? (
-                                            <CircleTwoToneIcon
-                                                fontSize="large"
-                                                sx={{ color: color }}
-                                            />
-                                        ) : (
-                                            color
-                                        )}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
+                        <Grid item xs={6} sm={3}>
+                            <FormControl key={`select${i}`} size="small">
+                                <InputLabel id={`select${i}`}>{`Color ${i + 1}`}</InputLabel>
+                                <Select
+                                    sx={{ width: "85px", minHeight: "58px" }}
+                                    labelId={`select${i}`}
+                                    id={`select${i}`}
+                                    value={selected[i]}
+                                    label={`Color ${i + 1}`}
+                                    onChange={(e) => chooseColor(i, e.target.value)}
+                                >
+                                    {colors.map((color) => (
+                                        <MenuItem value={color} key={color}>
+                                            {color !== colors[0] ? (
+                                                <CircleTwoToneIcon
+                                                    fontSize="large"
+                                                    sx={{ color: color }}
+                                                />
+                                            ) : (
+                                                color
+                                            )}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
                     );
                 })}
-            </Stack>
-            <Button variant="contained" onClick={(e) => submit(e)}>
+            </Grid>
+            <Button
+                variant="contained"
+                onClick={(e) => submit(e)}
+                size="large"
+                sx={{ backgroundColor: grey[900], "&:hover": { backgroundColor: grey[700] } }}
+            >
                 Submit
             </Button>
-            {oldGuesses.map((guesses, index) => {
-                return (
-                    <div
-                        key={index}
-                        style={{ padding: "10px", border: "2px solid black", borderRadius: "5px" }}
-                    >
-                        <Typography variant="h6" sx={{ paddingLeft: "4px" }}>
-                            Guess {index + 1}
-                        </Typography>
-                        <div>
-                            {guesses.colors.map((guess, i) => {
-                                return (
-                                    <CircleTwoToneIcon
-                                        fontSize="large"
-                                        key={i}
-                                        sx={{ color: guess }}
-                                    />
-                                );
-                            })}
-                        </div>
-                        <div>
-                            {Array.from(Array(guesses.results.white)).map(() => {
-                                return (
-                                    <CircleTwoToneIcon
-                                        fontSize="large"
-                                        sx={{ color: "lightGray" }}
-                                    />
-                                );
-                            })}
-                            {Array.from(Array(guesses.results.black)).map(() => {
-                                return (
-                                    <CircleTwoToneIcon fontSize="large" sx={{ color: "black" }} />
-                                );
-                            })}
-                            {Array.from(
-                                Array(4 - (guesses.results.white + guesses.results.black))
-                            ).map(() => {
-                                return <HideSourceIcon fontSize="large" sx={{ color: "black" }} />;
-                            })}
-                        </div>
-                    </div>
-                );
-            })}
+            <Grid
+                container
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                sx={{ maxWidth: "720px" }}
+            >
+                {oldGuesses
+                    .map((guesses, index) => {
+                        return (
+                            <Grid
+                                item
+                                key={index}
+                                sx={{
+                                    border: "2px solid black",
+                                    borderRadius: "5px",
+                                    margin: "5px 10px 5px 10px",
+                                    padding: "5px",
+                                }}
+                            >
+                                <Typography
+                                    variant="h6"
+                                    sx={{ paddingLeft: "4px" }}
+                                    textAlign="center"
+                                >
+                                    Guess {index + 1}
+                                </Typography>
+                                <div>
+                                    {guesses.colors.map((guess, i) => {
+                                        return (
+                                            <CircleTwoToneIcon
+                                                fontSize="large"
+                                                key={i}
+                                                sx={{ color: guess }}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                                <div>
+                                    {Array.from(Array(guesses.results.white)).map(() => {
+                                        return (
+                                            <CircleTwoToneIcon
+                                                fontSize="large"
+                                                sx={{ color: "lightGray" }}
+                                            />
+                                        );
+                                    })}
+                                    {Array.from(Array(guesses.results.black)).map(() => {
+                                        return (
+                                            <CircleTwoToneIcon
+                                                fontSize="large"
+                                                sx={{ color: "black" }}
+                                            />
+                                        );
+                                    })}
+                                    {Array.from(
+                                        Array(4 - (guesses.results.white + guesses.results.black))
+                                    ).map(() => {
+                                        return (
+                                            <ClearIcon fontSize="large" sx={{ color: "black" }} />
+                                        );
+                                    })}
+                                </div>
+                            </Grid>
+                        );
+                    })
+                    .reverse()}
+            </Grid>
         </Stack>
     );
 }
