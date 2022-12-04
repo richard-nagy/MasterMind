@@ -1,6 +1,5 @@
 import {
     Button,
-    Container,
     FormControl,
     Grid,
     InputLabel,
@@ -27,7 +26,8 @@ const getRandomColors = () => {
 function App() {
     const [guesses, setGuesses] = useState(0);
     const [oldGuesses, setOldGuesses] = useState([]);
-    const [selected, setSelected] = useState(Array.from(Array(4)).fill(colors[1]));
+    const [selected, setSelected] = useState(Array.from(Array(4)).fill(colors[0]));
+    const [gameOver, setGameOver] = useState({ over: false, winn: false });
     const randomColors = useRef(getRandomColors());
 
     const chooseColor = (index, color) => {
@@ -40,7 +40,6 @@ function App() {
         event.preventDefault();
 
         if (selected.includes("...")) {
-            alert("You must choose all four colors first!");
             return;
         }
 
@@ -68,7 +67,7 @@ function App() {
             }
         });
 
-        setSelected(() => [...Array.from(Array(4)).fill(colors[1])]);
+        setSelected(() => [...Array.from(Array(4)).fill(colors[0])]);
         setGuesses((oldState) => oldState + 1);
         setOldGuesses((oldState) => [
             ...oldState,
@@ -76,14 +75,23 @@ function App() {
         ]);
 
         if (JSON.stringify(randomColors.current) === JSON.stringify(selected)) {
-            alert("you wonn");
+            setGameOver({ over: true, winn: true });
             return;
         }
 
         if (guesses >= 7) {
-            alert("game over, you lost");
+            setGameOver({ over: true, winn: false });
             return;
         }
+    };
+
+    const restart = () => {
+        console.log("res");
+        setGuesses(0);
+        setOldGuesses([]);
+        setSelected(Array.from(Array(4)).fill(colors[0]));
+        setGameOver({ over: false, winn: false });
+        randomColors.current = getRandomColors();
     };
 
     return (
@@ -95,53 +103,88 @@ function App() {
                     return <li key={i}>{e}</li>;
                 })}
             </ul> */}
-            <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                spacing={2}
-                sx={{ width: { xs: "220px", sm: "450px" } }}
-            >
-                {Array.from(Array(4)).map((_, i) => {
-                    return (
-                        <Grid item xs={6} sm={3}>
-                            <FormControl key={`select${i}`} size="small">
-                                <InputLabel id={`select${i}`}>{`Color ${i + 1}`}</InputLabel>
-                                <Select
-                                    sx={{ width: "85px", minHeight: "58px" }}
-                                    labelId={`select${i}`}
-                                    id={`select${i}`}
-                                    value={selected[i]}
-                                    label={`Color ${i + 1}`}
-                                    onChange={(e) => chooseColor(i, e.target.value)}
-                                >
-                                    {colors.map((color) => (
-                                        <MenuItem value={color} key={color}>
-                                            {color !== colors[0] ? (
-                                                <CircleTwoToneIcon
-                                                    fontSize="large"
-                                                    sx={{ color: color }}
-                                                />
-                                            ) : (
-                                                color
-                                            )}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                    );
-                })}
-            </Grid>
-            <Button
-                variant="contained"
-                onClick={(e) => submit(e)}
-                size="large"
-                sx={{ backgroundColor: grey[900], "&:hover": { backgroundColor: grey[700] } }}
-            >
-                Submit
-            </Button>
+            {gameOver.over && (
+                <Stack
+                    direction="column"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    spacing={3}
+                >
+                    <Typography variant="h4" sx={{ textAlign: "center" }}>
+                        Game over
+                    </Typography>
+                    <Typography variant="h5" className="lose">
+                        {gameOver.winn ? "You winn" : "You lost"}
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        onClick={restart}
+                        size="large"
+                        sx={{
+                            backgroundColor: grey[900],
+                            "&:hover": { backgroundColor: grey[700] },
+                        }}
+                    >
+                        Restart game
+                    </Button>
+                </Stack>
+            )}
+            {!gameOver.over && (
+                <>
+                    <Grid
+                        container
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={2}
+                        sx={{ width: { xs: "220px", sm: "450px" } }}
+                    >
+                        {Array.from(Array(4)).map((_, i) => {
+                            return (
+                                <Grid item xs={6} sm={3}>
+                                    <FormControl key={`select${i}`} size="small">
+                                        <InputLabel id={`select${i}`}>{`Color ${
+                                            i + 1
+                                        }`}</InputLabel>
+                                        <Select
+                                            sx={{ width: "85px", minHeight: "58px" }}
+                                            labelId={`select${i}`}
+                                            id={`select${i}`}
+                                            value={selected[i]}
+                                            label={`Color ${i + 1}`}
+                                            onChange={(e) => chooseColor(i, e.target.value)}
+                                        >
+                                            {colors.map((color) => (
+                                                <MenuItem value={color} key={color}>
+                                                    {color !== colors[0] ? (
+                                                        <CircleTwoToneIcon
+                                                            fontSize="large"
+                                                            sx={{ color: color }}
+                                                        />
+                                                    ) : (
+                                                        color
+                                                    )}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                            );
+                        })}
+                    </Grid>
+                    <Button
+                        variant="contained"
+                        onClick={(e) => submit(e)}
+                        size="large"
+                        sx={{
+                            backgroundColor: grey[900],
+                            "&:hover": { backgroundColor: grey[700] },
+                        }}
+                    >
+                        Submit
+                    </Button>
+                </>
+            )}
             <Grid
                 container
                 direction="row"

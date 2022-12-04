@@ -2,3 +2,27 @@ span {
     text-shadow: -0.8px -0.8px 0 #000, 0 -0.8px 0 #000, 0.8px -0.8px 0 #000, 0.8px 0 0 #000,
         0.8px 0.8px 0 #000, 0 0.8px 0 #000, -0.8px 0.8px 0 #000, -0.8px 0 0 #000;
 }
+
+.lose {
+    text-align: center;
+    color: black;
+    animation: redBlinker 2s linear infinite;
+}
+
+@keyframes redBlinker {
+    50% {
+        color: red;
+    }
+}
+
+.winn {
+    text-align: center;
+    color: black;
+    animation: greenBlinker 2s linear infinite;
+}
+
+@keyframes greenBlinker {
+    50% {
+        color: green;
+    }
+}
