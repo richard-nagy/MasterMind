@@ -37,10 +37,10 @@ const GameOver = ({ gameOver, restart, secretColors }) => {
                     Game over
                 </Typography>
                 <Typography variant="h5">
-                    {gameOver.winn ? (
-                        <span className="winn">You winn!</span>
+                    {gameOver.win ? (
+                        <span className="win">Victory!</span>
                     ) : (
-                        <span className="lose">You lost!</span>
+                        <span className="lose">Defeat!</span>
                     )}
                 </Typography>
                 <div>

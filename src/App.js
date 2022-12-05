@@ -20,7 +20,7 @@ function App() {
     const [guesses, setGuesses] = useState(0);
     const [oldGuesses, setOldGuesses] = useState([]);
     const [selected, setSelected] = useState(Array.from(Array(4)).fill(colors[0]));
-    const [gameOver, setGameOver] = useState({ over: false, winn: false });
+    const [gameOver, setGameOver] = useState({ over: false, win: false });
 
     // Set the value of 1 color out of the 4
     const chooseColor = (index, color) => {
@@ -71,15 +71,15 @@ function App() {
             { colors: selected, results: { black: points.black, white: points.white } },
         ]);
 
-        // If all colors are good on the good places we winn
+        // If all colors are good on the good places we win
         if (points.white === 4) {
-            setGameOver({ over: true, winn: true });
+            setGameOver({ over: true, win: true });
             return;
         }
 
         // If this was the 8th try we lose
         if (guesses >= 7) {
-            setGameOver({ over: true, winn: false });
+            setGameOver({ over: true, win: false });
             return;
         }
     };
@@ -90,7 +90,7 @@ function App() {
         setGuesses(0);
         setOldGuesses([]);
         setSelected(Array.from(Array(4)).fill(colors[0]));
-        setGameOver({ over: false, winn: false });
+        setGameOver({ over: false, win: false });
         randomColors.current = getRandomColors();
     };
 
