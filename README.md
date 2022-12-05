@@ -26,3 +26,4 @@ This project is a Mind Game. The application randomly selects 4 colors, and the 
 -   If we guess the color correctly within 8 guesses we get a **Victory** message
 -   If we failed to guess the colors we get a **Defeat** message
 -   After the game ended hide the color-selecting options, and reveal a button to restart the game
+-   The application is compatible with mobile phone screens, down to 320px width
