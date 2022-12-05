@@ -1,6 +1,6 @@
-# Mind Game
+# Master Mind
 
-This project is a Mind Game. The application randomly selects 4 colors, and the user gets 8 chances to guess the 4 colors, in the right order.
+This project is a mind game. The application randomly selects 4 colors, and the user gets 8 chances to guess the 4 colors, in the right order.
 
 ## What technologies have I used
 

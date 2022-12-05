@@ -96,13 +96,8 @@ function App() {
 
     return (
         <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={4}>
-            <Typography variant="h3">Mind Game</Typography>
+            <Typography variant="h3">Master Mind</Typography>
             <Typography variant="h5">Number of Guesses: {guesses}</Typography>
-            {/* <ul>
-                {randomColors.current.map((e, i) => {
-                    return <li key={i}>{e}</li>;
-                })}
-            </ul> */}
             <GameOver gameOver={gameOver} restart={restart} secretColors={randomColors.current} />
             <ColorSelect
                 gameOver={gameOver}
